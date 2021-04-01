@@ -7,8 +7,8 @@ import co.com.avvillas.anagrams.service.definitions.IAnagramService;
 import co.com.avvillas.anagrams.util.RegexUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,15 +49,45 @@ public class AnagramsBusiness {
         : new AnagramResponse("Words in sentences must have only letters and not be empty.");
   }
 
-  public AnagramResponse saveSentence(String sentence) {
-    List<SentenceDTO> sentences = sentenceService.findAll().orElse(null);
+  public AnagramResponse validateIfPersistedSentencesShareAnagrams() {
+    List<SentenceDTO> sentences = getPersistedSentences();
+    if (sentences.size() == 3) {
 
-    if (sentences == null || sentences.size() < 3) {
-      sentenceService.save(new SentenceDTO(sentence));
-      return new AnagramResponse("Sentence saved");
-    } else {
-      return new AnagramResponse("Max number of sentences saved, please verify result.");
+      List<String> sentencesList = sentences.stream()
+          .map(SentenceDTO::getSentence)
+          .collect(Collectors.toList());
+      sentenceService.deleteAll();
+
+      return new AnagramResponse(anagramService
+          .validateIfSentencesShareAnagrams(
+              sentencesList.get(0),
+              sentencesList.get(1),
+              sentencesList.get(2)));
     }
+    return new AnagramResponse("Not enough sentences to validate");
+  }
+
+  public AnagramResponse saveSentence(String sentence) {
+    List<SentenceDTO> persistedSentences = getPersistedSentences();
+
+    if (persistedSentences.size() >= 3) {
+      return new AnagramResponse("Max number of sentences saved, please verify result.");
+    } else if (sentenceExistsInDb(sentence, persistedSentences)) {
+      return new AnagramResponse("Sentence is already saved in db.");
+    } else {
+      sentenceService.save(new SentenceDTO(sentence));
+      return new AnagramResponse("Saved!");
+    }
+
+  }
+
+  private boolean sentenceExistsInDb(String sentence, List<SentenceDTO> sentenceList) {
+    return sentenceList.stream()
+        .anyMatch(sentenceDTO -> sentenceDTO.getSentence().equals(sentence));
+  }
+
+  private List<SentenceDTO> getPersistedSentences() {
+    return sentenceService.findAll().orElse(new ArrayList<>());
   }
 
 }

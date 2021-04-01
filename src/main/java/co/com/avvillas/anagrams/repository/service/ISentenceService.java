@@ -8,5 +8,6 @@ public interface ISentenceService {
 
   Optional<List<SentenceDTO>> findAll(); //TODO: Manage Exceptions
   void save(SentenceDTO sentence);
+  void deleteAll();
 
 }

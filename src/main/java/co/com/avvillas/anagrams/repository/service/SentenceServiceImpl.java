@@ -32,8 +32,14 @@ public class SentenceServiceImpl implements ISentenceService {
 
   @Override
   public void save(SentenceDTO sentence) {
+    //TODO: Can be do this validation before
     if (sentence != null && !StringUtils.isEmptyOrWhitespaceOnly(sentence.getSentence())) {
       sentenceRepository.save(new SentenceEntity(sentence.getSentence()));
     }
+  }
+
+  @Override
+  public void deleteAll() {
+    sentenceRepository.deleteAll();
   }
 }
