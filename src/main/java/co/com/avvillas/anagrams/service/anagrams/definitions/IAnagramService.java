@@ -1,4 +1,4 @@
-package co.com.avvillas.anagrams.services.anagrams.definitions;
+package co.com.avvillas.anagrams.service.anagrams.definitions;
 
 import co.com.avvillas.anagrams.api.SentencesOccurrenceResult;
 

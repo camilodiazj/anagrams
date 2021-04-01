@@ -1,7 +1,7 @@
-package co.com.avvillas.anagrams.services.anagrams;
+package co.com.avvillas.anagrams.service.anagrams;
 
 import co.com.avvillas.anagrams.api.SentencesOccurrenceResult;
-import co.com.avvillas.anagrams.services.anagrams.definitions.IAnagramService;
+import co.com.avvillas.anagrams.service.anagrams.definitions.IAnagramService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
