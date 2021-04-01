@@ -1,13 +1,14 @@
 package co.com.avvillas.anagrams.controller;
 
+import co.com.avvillas.anagrams.api.AnagramRequest;
 import co.com.avvillas.anagrams.api.AnagramResponse;
+import co.com.avvillas.anagrams.api.PersistSentenceRequest;
 import co.com.avvillas.anagrams.business.AnagramsBusiness;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,33 +22,27 @@ public class AnagramController {
     this.anagramService = anagramService;
   }
 
-  @GetMapping("/words/validation")
-  public ResponseEntity<AnagramResponse> validateIfWordsAreAnagrams(
-      //TODO: Maybe this can use a RequestBody
-      @RequestParam(value = "first-word") String firstWord,
-      @RequestParam(value = "second-word") String secondWord) {
-
-    return ResponseEntity.ok(anagramService.validateIfWordsAreAnagrams(firstWord, secondWord));
+  @GetMapping("/validation/words")
+  public ResponseEntity<AnagramResponse> validateIfWordsAreAnagrams(@RequestBody
+      AnagramRequest request) {
+    return ResponseEntity.ok(anagramService.validateIfWordsAreAnagrams(request));
   }
 
-  @GetMapping("/sentences/validation")
-  public ResponseEntity<AnagramResponse> validateIfSentencesShareAnagrams(
-      //TODO: Maybe this can use a RequestBody
-      @RequestParam(value = "first-sentence") String firstSentence,
-      @RequestParam(value = "second-sentence") String secondSentence) {
+  @GetMapping("/validation/sentences")
+  public ResponseEntity<AnagramResponse> validateIfSentencesShareAnagrams(@RequestBody
+      AnagramRequest request) {
     return ResponseEntity
-        .ok(anagramService.validateIfSentencesShareAnagrams(firstSentence, secondSentence));
+        .ok(anagramService.validateIfSentencesShareAnagrams(request));
   }
 
   @PostMapping("/sentences")
-  public ResponseEntity<AnagramResponse> persistSentence(@RequestParam String sentence) {
-    //TODO: Maybe this can use a RequestBody
-    return ResponseEntity.ok(anagramService.saveSentence(sentence));
+  public ResponseEntity<AnagramResponse> persistSentence(
+      @RequestBody PersistSentenceRequest request) {
+    return ResponseEntity.ok(anagramService.saveSentence(request.getSentence()));
   }
 
-  @GetMapping("/sentences/validation/{id}")
-  public ResponseEntity<AnagramResponse> validateIfPersistedSentencesShareAnagrams(
-      @PathVariable String id) {
+  @GetMapping("/validation/persisted-sentences")
+  public ResponseEntity<AnagramResponse> validateIfPersistedSentencesShareAnagrams() {
     return ResponseEntity.ok(anagramService.validateIfPersistedSentencesShareAnagrams());
   }
 }

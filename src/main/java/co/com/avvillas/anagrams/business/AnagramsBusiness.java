@@ -1,6 +1,7 @@
 package co.com.avvillas.anagrams.business;
 
 import co.com.avvillas.anagrams.api.AnagramResponse;
+import co.com.avvillas.anagrams.api.AnagramRequest;
 import co.com.avvillas.anagrams.repository.dto.SentenceDTO;
 import co.com.avvillas.anagrams.repository.service.ISentenceService;
 import co.com.avvillas.anagrams.service.definitions.IAnagramService;
@@ -24,7 +25,9 @@ public class AnagramsBusiness {
     this.sentenceService = sentenceService;
   }
 
-  public AnagramResponse validateIfWordsAreAnagrams(String firstWord, String secondWord) {
+  public AnagramResponse validateIfWordsAreAnagrams(AnagramRequest request) {
+    String firstWord = request.getFirst();
+    String secondWord = request.getSecond();
 
     boolean areInputOk =
         RegexUtils.wordMatchRegex(firstWord.trim(), RegexUtils.ONLY_LETTERS_REGEX) && RegexUtils
@@ -34,9 +37,10 @@ public class AnagramsBusiness {
         : new AnagramResponse("Words may have only letters and not be empty.");
   }
 
-  public AnagramResponse validateIfSentencesShareAnagrams(String firstSentence,
-      String secondSentence) {
-    //TODO: Revisar si es necesario (ignorar números individuales)
+  public AnagramResponse validateIfSentencesShareAnagrams(AnagramRequest request) {
+    String firstSentence = request.getFirst();
+    String secondSentence = request.getSecond();
+
     boolean isFirstSentenceOk = Arrays
         .stream(firstSentence.split(" "))
         .allMatch(word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_REGEX));
