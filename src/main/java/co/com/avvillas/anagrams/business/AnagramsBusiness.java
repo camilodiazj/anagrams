@@ -1,7 +1,7 @@
 package co.com.avvillas.anagrams.business;
 
 import co.com.avvillas.anagrams.api.AnagramResponse;
-import co.com.avvillas.anagrams.service.anagrams.definitions.IAnagramService;
+import co.com.avvillas.anagrams.service.definitions.IAnagramService;
 import co.com.avvillas.anagrams.util.RegexUtils;
 import java.util.Arrays;
 import org.springframework.stereotype.Service;
