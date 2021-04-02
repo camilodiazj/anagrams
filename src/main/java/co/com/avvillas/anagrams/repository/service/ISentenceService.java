@@ -6,8 +6,10 @@ import java.util.Optional;
 
 public interface ISentenceService {
 
-  Optional<List<SentenceDTO>> findAll(); //TODO: Manage Exceptions
+  Optional<List<SentenceDTO>> findAll();
+
   void save(SentenceDTO sentence);
+
   void deleteAll();
 
 }

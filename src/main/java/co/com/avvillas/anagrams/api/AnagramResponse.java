@@ -1,13 +1,12 @@
 package co.com.avvillas.anagrams.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
+@Builder
 public class AnagramResponse {
 
-  @JsonProperty("Response")
   private Object response;
+  private String errorMessage;
 }
