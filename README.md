@@ -25,9 +25,10 @@ If you prefer [install Gradle](http://www.gradle.org/installation) or use a [Gra
 * Change into the new directory `cd anagrams`
 
 ## Build project
+* If you are in Windows, is recommended to use Git Bash to run the bash commands.
 
 ```bash
-./gradlew clean build
+./gradlew clean build 
 ```
 
 ## Run tests
@@ -37,14 +38,38 @@ If you prefer [install Gradle](http://www.gradle.org/installation) or use a [Gra
 ```
 
 ## Run
-* This application runs over port 8080, so you should prefix endpoint with http://localhost:8080/
+- You need a Database to persist Data
+- Before run application, follow the next steps:
+> Deploy MariaDb:
+> 1. Change into `cd docker-db`, in terminal use:
+```bash
+docker-compose up
+```
+In linux:
+```bash
+sudo docker-compose up
+```
+
+> If you already have [Mysql](https://www.mysql.com/) or [MariaDB](https://mariadb.org/) installed in
+your computer, you can modify the DataBase port in file `application.properties`,
+* Current port is `33020`
+* Property to update: jdbc:mysql://localhost:`33020`/anagrams?createDatabaseIfNotExist=true
+> located in `src/main/resources`
+```bash
+cd src/main/resources
+```
+---
+Once you have an active database, open another terminal, go to the root folder `cd anagrams`, and use:
 
 ```bash
+./gradlew clean build
 java -jar build/libs/anagrams-*.jar
 ```
 
+* This application runs over port 8080, so you should prefix endpoints with http://localhost:8080/
 ## Swagger Documentation
 * When application is running use the following link:
 http://localhost:8080/swagger-ui.html
-  * Is recommended use [POSTMAN](https://www.postman.com/) to consume the Endpoints.
-    
+
+> Is recommended use [POSTMAN](https://www.postman.com/) to consume the Endpoints.
+> Postman Collection in `anagrams/postman_collection.json`  

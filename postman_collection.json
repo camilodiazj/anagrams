@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "a76e2c09-37d6-4078-90f9-15bb18ef2e7c",
+		"name": "Anagrams Postman Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Validate Words",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first\":\"Army\",\n    \"second\":\"mary\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/anagrams/validation/words",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"anagrams",
+						"validation",
+						"words"
+					]
+				},
+				"description": "Validate it words are anagrams"
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Sentences",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first\":  \"angela es conservadora\",\n    \"second\": \"ellos alegan que ella es muy conversadora\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/anagrams/validation/sentences",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"anagrams",
+						"validation",
+						"sentences"
+					]
+				},
+				"description": "Validate anagrams shared into two sentences"
+			},
+			"response": []
+		},
+		{
+			"name": "Save sentence in Database",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"sentence\":\"el jugo de fresa se licua ironicamente\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/anagrams/sentences",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"anagrams",
+						"sentences"
+					]
+				},
+				"description": "Used for persist a maximun of three sentences in db, after you save your sentences, you can use the GET \"anagramas/validation/persisted-sentences\" to verity the result."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Saved Sentences Result ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/anagrams/validation/persisted-sentences",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"anagrams",
+						"validation",
+						"persisted-sentences"
+					]
+				},
+				"description": "Returns the anagrams validation into the three sentences saved in database, if not exist almost three sentences, the service return errorMessage."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
