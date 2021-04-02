@@ -52,17 +52,16 @@ sudo docker-compose up
 
 > If you already have [Mysql](https://www.mysql.com/) or [MariaDB](https://mariadb.org/) installed in
 your computer, you can modify the DataBase port, db username and db password in file `application.properties`,
-  * Current port is `33020`
-  * Current username is `root`
-  * Current password is `root`
-  - Properties to update: 
-  - jdbc:mysql://localhost:`33020`/anagrams?createDatabaseIfNotExist=true 
-  - spring.datasource.username=`root`
-  - spring.datasource.password=`root`
-> located into `src/main/resources`
-```bash
-cd src/main/resources
-```
+>  * Current port is `33020`
+>  * Current username is `root`
+>  * Current password is `root`
+>  - Properties to update: 
+>  - jdbc:mysql://localhost:`33020`/anagrams?createDatabaseIfNotExist=true 
+>  - spring.datasource.username=`root`
+>  - spring.datasource.password=`root`
+
+> Located into `cd src/main/resources`
+
 ---
 Once you have an active database, open another terminal, go to the root folder `cd anagrams`, and use:
 
