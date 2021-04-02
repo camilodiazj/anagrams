@@ -34,9 +34,12 @@ public class AnagramsBusiness {
     String secondWord = request.getSecond();
     boolean areInputOk = isValidWord(firstWord) && isValidWord(secondWord);
 
-    return areInputOk ? new AnagramResponse(anagramService.areWordsAnagrams(firstWord, secondWord),
-        null)
-        : new AnagramResponse(null, "Words may have only letters and not be empty.");
+    return areInputOk ? AnagramResponse.builder()
+        .response(anagramService.areWordsAnagrams(firstWord, secondWord))
+        .build() :
+        AnagramResponse.builder()
+            .errorMessage("Words may have only letters and not be empty.")
+            .build();
   }
 
   public AnagramResponse validateIfSentencesShareAnagrams(AnagramRequest request) {
@@ -44,9 +47,13 @@ public class AnagramsBusiness {
     String secondSentence = request.getSecond();
 
     return isSentenceValid(firstSentence) && isSentenceValid(secondSentence) ?
-        new AnagramResponse(
-            anagramService.validateIfSentencesShareAnagrams(firstSentence, secondSentence), null)
-        : new AnagramResponse(null, INVALID_SENTENCE_MESSAGE);
+        AnagramResponse.builder()
+            .response(
+                anagramService.validateIfSentencesShareAnagrams(firstSentence, secondSentence))
+            .build() :
+        AnagramResponse.builder()
+            .errorMessage(INVALID_SENTENCE_MESSAGE)
+            .build();
   }
 
   public AnagramResponse validateIfPersistedSentencesShareAnagrams() {
@@ -57,14 +64,17 @@ public class AnagramsBusiness {
           .collect(Collectors.toList());
       sentenceService.deleteAll();
 
-      return new AnagramResponse(anagramService
-          .validateIfSentencesShareAnagrams(
-              sentencesList.get(0),
-              sentencesList.get(1),
-              sentencesList.get(2)), null);
+      return
+          AnagramResponse.builder()
+              .response(anagramService.validateIfSentencesShareAnagrams(
+                  sentencesList.get(0),
+                  sentencesList.get(1),
+                  sentencesList.get(2)))
+              .build();
     } else {
-      return new AnagramResponse(null,
-          "Not enough sentences to validate, please send more sentences");
+      return AnagramResponse.builder()
+          .errorMessage("Not enough sentences to validate, please send more sentences")
+          .build();
     }
   }
 
@@ -72,14 +82,22 @@ public class AnagramsBusiness {
     List<SentenceDTO> persistedSentences = getPersistedSentences();
 
     if (persistedSentences.size() >= 3) {
-      return new AnagramResponse(null, "Three sentences saved, please verify result.");
-    } else if (sentenceExistsInDb(sentence, persistedSentences)) {
-      return new AnagramResponse(null, "Sentence is already saved in db.");
+      return AnagramResponse.builder()
+          .errorMessage("Three sentences saved, please verify result.")
+          .build();
+    } else if (isTheSentenceAlreadyInDb(sentence, persistedSentences)) {
+      return AnagramResponse.builder()
+          .errorMessage("Sentence is already saved in db.")
+          .build();
     } else if (!isSentenceValid(sentence)) {
-      return new AnagramResponse(null, INVALID_SENTENCE_MESSAGE);
+      return AnagramResponse.builder()
+          .errorMessage(INVALID_SENTENCE_MESSAGE)
+          .build();
     } else {
       sentenceService.save(new SentenceDTO(sentence));
-      return new AnagramResponse("Saved!", null);
+      return AnagramResponse.builder()
+          .response("Saved!")
+          .build();
     }
 
   }
@@ -95,7 +113,7 @@ public class AnagramsBusiness {
         .allMatch(word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_REGEX));
   }
 
-  private boolean sentenceExistsInDb(String sentence, List<SentenceDTO> sentenceList) {
+  private boolean isTheSentenceAlreadyInDb(String sentence, List<SentenceDTO> sentenceList) {
     return sentenceList.stream()
         .anyMatch(sentenceDTO -> sentenceDTO.getSentence().equals(sentence));
   }
