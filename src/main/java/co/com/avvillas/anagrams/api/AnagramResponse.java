@@ -1,6 +1,5 @@
 package co.com.avvillas.anagrams.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class AnagramResponse {
 
-  @JsonProperty("Response")
   private Object response;
+  private String errorMessage;
 }

@@ -34,8 +34,9 @@ public class AnagramsBusiness {
     String secondWord = request.getSecond();
     boolean areInputOk = isValidWord(firstWord) && isValidWord(secondWord);
 
-    return areInputOk ? new AnagramResponse(anagramService.areWordsAnagrams(firstWord, secondWord))
-        : new AnagramResponse("Words may have only letters and not be empty.");
+    return areInputOk ? new AnagramResponse(anagramService.areWordsAnagrams(firstWord, secondWord),
+        null)
+        : new AnagramResponse(null, "Words may have only letters and not be empty.");
   }
 
   public AnagramResponse validateIfSentencesShareAnagrams(AnagramRequest request) {
@@ -44,8 +45,8 @@ public class AnagramsBusiness {
 
     return isSentenceValid(firstSentence) && isSentenceValid(secondSentence) ?
         new AnagramResponse(
-            anagramService.validateIfSentencesShareAnagrams(firstSentence, secondSentence))
-        : new AnagramResponse(INVALID_SENTENCE_MESSAGE);
+            anagramService.validateIfSentencesShareAnagrams(firstSentence, secondSentence), null)
+        : new AnagramResponse(null, INVALID_SENTENCE_MESSAGE);
   }
 
   public AnagramResponse validateIfPersistedSentencesShareAnagrams() {
@@ -60,9 +61,10 @@ public class AnagramsBusiness {
           .validateIfSentencesShareAnagrams(
               sentencesList.get(0),
               sentencesList.get(1),
-              sentencesList.get(2)));
+              sentencesList.get(2)), null);
     } else {
-      return new AnagramResponse("Not enough sentences to validate, please send more sentences");
+      return new AnagramResponse(null,
+          "Not enough sentences to validate, please send more sentences");
     }
   }
 
@@ -70,14 +72,14 @@ public class AnagramsBusiness {
     List<SentenceDTO> persistedSentences = getPersistedSentences();
 
     if (persistedSentences.size() >= 3) {
-      return new AnagramResponse("Three sentences saved, please verify result.");
+      return new AnagramResponse(null, "Three sentences saved, please verify result.");
     } else if (sentenceExistsInDb(sentence, persistedSentences)) {
-      return new AnagramResponse("Sentence is already saved in db.");
+      return new AnagramResponse(null, "Sentence is already saved in db.");
     } else if (!isSentenceValid(sentence)) {
-      return new AnagramResponse(INVALID_SENTENCE_MESSAGE);
+      return new AnagramResponse(null, INVALID_SENTENCE_MESSAGE);
     } else {
       sentenceService.save(new SentenceDTO(sentence));
-      return new AnagramResponse("Saved!");
+      return new AnagramResponse("Saved!", null);
     }
 
   }
