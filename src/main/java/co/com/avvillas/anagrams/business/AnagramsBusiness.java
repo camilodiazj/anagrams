@@ -119,7 +119,7 @@ public class AnagramsBusiness {
   }
 
   private List<SentenceDTO> getPersistedSentences() {
-    return sentenceRepositoryService.findAll().orElse(new ArrayList<>());
+    return sentenceRepositoryService.findAllEnable().orElse(new ArrayList<>());
   }
 
 }

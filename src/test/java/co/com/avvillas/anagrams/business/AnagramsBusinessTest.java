@@ -124,7 +124,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("sent2"),
         new SentenceDTO("sent3"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
     Mockito.doNothing().when(sentenceRepositoryService).deleteAll();
     Mockito.when(anagramService
@@ -146,7 +146,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("sent2"),
         new SentenceDTO("sent3"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
     Mockito.doNothing().when(sentenceRepositoryService).deleteAll();
     Mockito.when(anagramService
@@ -167,7 +167,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("sent1"),
         new SentenceDTO("sent2"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
 
     AnagramResponse result = anagramsBusiness.validateIfPersistedSentencesShareAnagrams();
@@ -180,7 +180,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("the first sentence"),
         new SentenceDTO("the second sentence"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
     Mockito.doNothing().when(sentenceRepositoryService).save(Mockito.any(SentenceDTO.class));
 
@@ -196,7 +196,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("the second sentence"),
         new SentenceDTO("the third sentence"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
 
     AnagramResponse result = anagramsBusiness.saveSentence("the third sentence");
@@ -209,7 +209,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("the first sentence"),
         new SentenceDTO("the third sentence"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
 
     AnagramResponse result = anagramsBusiness.saveSentence("the third sentence");
@@ -224,7 +224,7 @@ public class AnagramsBusinessTest {
         new SentenceDTO("the first sentence"),
         new SentenceDTO("the third sentence"));
 
-    Mockito.when(sentenceRepositoryService.findAll())
+    Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
 
     AnagramResponse result = anagramsBusiness.saveSentence("");

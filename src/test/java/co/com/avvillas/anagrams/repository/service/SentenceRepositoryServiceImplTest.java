@@ -30,22 +30,22 @@ public class SentenceRepositoryServiceImplTest {
         .asList(new SentenceEntity("sentence one"), new SentenceEntity("sentence two"),
             new SentenceEntity("sentence three"));
 
-    Mockito.when(sentenceRepository.findAll())
+    Mockito.when(sentenceRepository.findAllByEnable(true))
         .thenReturn(persistedEntities);
 
     Optional<List<SentenceDTO>> result = repositoryService
-        .findAll();
+        .findAllEnable();
     Assert.assertTrue(result.isPresent());
     Assert.assertEquals(3, result.get().size());
   }
 
   @Test
   public void shouldFindAllReturnEmptyOptional() {
-    Mockito.when(sentenceRepository.findAll())
+    Mockito.when(sentenceRepository.findAllByEnable(true))
         .thenReturn(new ArrayList<>());
 
     Optional<List<SentenceDTO>> result = repositoryService
-        .findAll();
+        .findAllEnable();
     Assert.assertFalse(result.isPresent());
   }
 
@@ -61,8 +61,8 @@ public class SentenceRepositoryServiceImplTest {
 
   @Test
   public void shouldDeleteAllSuccessfully(){
-    Mockito.doNothing().when(sentenceRepository).deleteAll();
+    Mockito.doNothing().when(sentenceRepository).disableAll();
     repositoryService.deleteAll();
-    Mockito.verify(sentenceRepository).deleteAll();
+    Mockito.verify(sentenceRepository).disableAll();
   }
 }

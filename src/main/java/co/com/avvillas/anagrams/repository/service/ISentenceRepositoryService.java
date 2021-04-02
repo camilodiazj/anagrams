@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface ISentenceRepositoryService {
 
-  Optional<List<SentenceDTO>> findAll();
+  Optional<List<SentenceDTO>> findAllEnable();
 
   void save(SentenceDTO sentence);
 
