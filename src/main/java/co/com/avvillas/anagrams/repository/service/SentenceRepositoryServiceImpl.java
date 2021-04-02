@@ -10,11 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SentenceServiceImpl implements ISentenceService {
+public class SentenceRepositoryServiceImpl implements ISentenceRepositoryService {
 
   private final ISentenceDao sentenceRepository;
 
-  public SentenceServiceImpl(
+  public SentenceRepositoryServiceImpl(
       ISentenceDao sentenceRepository) {
     this.sentenceRepository = sentenceRepository;
   }

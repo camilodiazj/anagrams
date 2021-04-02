@@ -4,7 +4,7 @@ import co.com.avvillas.anagrams.repository.dto.SentenceDTO;
 import java.util.List;
 import java.util.Optional;
 
-public interface ISentenceService {
+public interface ISentenceRepositoryService {
 
   Optional<List<SentenceDTO>> findAll();
 

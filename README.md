@@ -46,5 +46,5 @@ java -jar build/libs/anagrams-*.jar
 ## Swagger Documentation
 * When application is running use the following link:
 http://localhost:8080/swagger-ui.html
-  * Is recommended use [POSTAM](https://www.postman.com/) to consume the Endpoints.
+  * Is recommended use [POSTMAN](https://www.postman.com/) to consume the Endpoints.
     

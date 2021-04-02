@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("anagrams")
 public class AnagramController {
 
-  private final AnagramsBusiness anagramService;
+  private final AnagramsBusiness anagramsBusiness;
 
   public AnagramController(
       AnagramsBusiness anagramService) {
-    this.anagramService = anagramService;
+    this.anagramsBusiness = anagramService;
   }
 
   @GetMapping("/validation/words")
   public ResponseEntity<AnagramResponse> validateIfWordsAreAnagrams(@RequestBody
       AnagramRequest request) {
-    AnagramResponse response = anagramService.validateIfWordsAreAnagrams(request);
+    AnagramResponse response = anagramsBusiness.validateIfWordsAreAnagrams(request);
 
     return isSuccessfulResponse(response) ? ResponseEntity.ok(response)
         : ResponseEntity.badRequest().body(response);
@@ -35,7 +35,7 @@ public class AnagramController {
   @GetMapping("/validation/sentences")
   public ResponseEntity<AnagramResponse> validateIfSentencesShareAnagrams(@RequestBody
       AnagramRequest request) {
-    AnagramResponse response = anagramService.validateIfSentencesShareAnagrams(request);
+    AnagramResponse response = anagramsBusiness.validateIfSentencesShareAnagrams(request);
 
     return isSuccessfulResponse(response) ? ResponseEntity.ok(response)
         : ResponseEntity.badRequest().body(response);
@@ -44,7 +44,7 @@ public class AnagramController {
   @PostMapping("/sentences")
   public ResponseEntity<AnagramResponse> persistSentence(
       @RequestBody PersistSentenceRequest request) {
-    AnagramResponse response = anagramService.saveSentence(request.getSentence());
+    AnagramResponse response = anagramsBusiness.saveSentence(request.getSentence());
 
     return isSuccessfulResponse(response) ? new ResponseEntity<>(response, HttpStatus.CREATED)
         : ResponseEntity.badRequest().body(response);
@@ -52,7 +52,7 @@ public class AnagramController {
 
   @GetMapping("/validation/persisted-sentences")
   public ResponseEntity<AnagramResponse> validateIfPersistedSentencesShareAnagrams() {
-    AnagramResponse response = anagramService.validateIfPersistedSentencesShareAnagrams();
+    AnagramResponse response = anagramsBusiness.validateIfPersistedSentencesShareAnagrams();
 
     return isSuccessfulResponse(response) ? ResponseEntity.ok(response)
         : ResponseEntity.badRequest().body(response);

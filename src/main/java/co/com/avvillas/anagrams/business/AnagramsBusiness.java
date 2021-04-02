@@ -3,7 +3,7 @@ package co.com.avvillas.anagrams.business;
 import co.com.avvillas.anagrams.api.AnagramRequest;
 import co.com.avvillas.anagrams.api.AnagramResponse;
 import co.com.avvillas.anagrams.repository.dto.SentenceDTO;
-import co.com.avvillas.anagrams.repository.service.ISentenceService;
+import co.com.avvillas.anagrams.repository.service.ISentenceRepositoryService;
 import co.com.avvillas.anagrams.service.definitions.IAnagramService;
 import co.com.avvillas.anagrams.util.RegexUtils;
 import java.util.ArrayList;
@@ -17,16 +17,16 @@ import org.springframework.stereotype.Service;
 public class AnagramsBusiness {
 
   private final IAnagramService anagramService;
-  private final ISentenceService sentenceService;
+  private final ISentenceRepositoryService sentenceRepositoryService;
   private static final String SRT_SPACE = " ";
   private static final String INVALID_SENTENCE_MESSAGE =
       "Words in sentences must have only letters and Sentence must not be empty.";
 
   public AnagramsBusiness(
       IAnagramService anagramService,
-      ISentenceService sentenceService) {
+      ISentenceRepositoryService sentenceService) {
     this.anagramService = anagramService;
-    this.sentenceService = sentenceService;
+    this.sentenceRepositoryService = sentenceService;
   }
 
   public AnagramResponse validateIfWordsAreAnagrams(AnagramRequest request) {
@@ -62,7 +62,7 @@ public class AnagramsBusiness {
       List<String> sentencesList = sentences.stream()
           .map(SentenceDTO::getSentence)
           .collect(Collectors.toList());
-      sentenceService.deleteAll();
+      sentenceRepositoryService.deleteAll();
 
       return
           AnagramResponse.builder()
@@ -94,7 +94,7 @@ public class AnagramsBusiness {
           .errorMessage(INVALID_SENTENCE_MESSAGE)
           .build();
     } else {
-      sentenceService.save(new SentenceDTO(sentence));
+      sentenceRepositoryService.save(new SentenceDTO(sentence));
       return AnagramResponse.builder()
           .response("Saved!")
           .build();
@@ -119,7 +119,7 @@ public class AnagramsBusiness {
   }
 
   private List<SentenceDTO> getPersistedSentences() {
-    return sentenceService.findAll().orElse(new ArrayList<>());
+    return sentenceRepositoryService.findAll().orElse(new ArrayList<>());
   }
 
 }
