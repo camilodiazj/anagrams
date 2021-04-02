@@ -21,15 +21,29 @@ public class AnagramServiceImplTest {
   }
 
   @Test
-  public void shouldValidateIfSentencesShareAnagrams() {
+  public void shouldAreWordsAnagramsReturnTrue() {
+    boolean result = anagramService.areWordsAnagrams("mary", "army");
+    Assert.assertTrue(result);
+  }
+
+  @Test
+  public void shouldValidateIfSentencesShareAnagramsReturnThreeOccurrences() {
     SentencesOccurrenceResult result = anagramService
-        .validateIfSentencesShareAnagrams("angela es angela conservadora",
+        .validateIfSentencesShareAnagrams("es angela conservadora",
             "ellos alegan que ella es es muy conversadora");
     Assert.assertEquals(3, result.getOccurrencesCount());
   }
 
   @Test
-  public void shouldValidateIfThreeSentencesShareAnagrams() {
+  public void shouldValidateIfSentencesShareAnagramsReturnZero() {
+    SentencesOccurrenceResult result = anagramService
+        .validateIfSentencesShareAnagrams("Es Angela conservadora",
+            "ellos alegan que ella es es muy Conversadora");
+    Assert.assertEquals(0, result.getOccurrencesCount());
+  }
+
+  @Test
+  public void shouldValidateIfThreeSentencesShareAnagramsReturnFourOccurrences() {
     SentencesOccurrenceResult result = anagramService.validateIfSentencesShareAnagrams(
         "lucia viaja a roma",
         "el jugo de fresa se licua ironicamente",
@@ -39,21 +53,21 @@ public class AnagramServiceImplTest {
   }
 
   @Test
-  public void shouldValidateIfThreeSentencesShareAnagramsSecondOrder() {
+  public void shouldValidateIfThreeSentencesShareAnagramsReturnThreeOccurrences() {
+    SentencesOccurrenceResult result = anagramService.validateIfSentencesShareAnagrams(
+        "lucia viaja a roma",
+        "el jugo de Fresa se licua ironicamente",
+        "en una frase del renacimiento encontramos amor");
+
+    Assert.assertEquals(3, result.getOccurrencesCount());
+  }
+
+  @Test
+  public void shouldValidateIfThreeSentencesShareAnagramsInDistinctOrderReturnThreeOccurrences() {
     SentencesOccurrenceResult result = anagramService.validateIfSentencesShareAnagrams(
         "el jugo de fresa se licua ironicamente",
         "lucia viaja a roma",
         "en una frase del renacimiento encontramos amor");
-
-    Assert.assertEquals(4, result.getOccurrencesCount());
-  }
-
-  @Test
-  public void shouldValidateIfThreeSentencesShareAnagramsThirdOrder() {
-    SentencesOccurrenceResult result = anagramService.validateIfSentencesShareAnagrams(
-        "en una frase del renacimiento encontramos amor",
-        "el jugo de fresa se licua ironicamente",
-        "lucia viaja a roma");
 
     Assert.assertEquals(4, result.getOccurrencesCount());
   }

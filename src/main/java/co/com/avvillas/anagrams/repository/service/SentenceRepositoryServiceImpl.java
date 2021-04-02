@@ -7,22 +7,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class SentenceServiceImpl implements ISentenceService {
+@Repository
+public class SentenceRepositoryServiceImpl implements ISentenceRepositoryService {
 
   private final ISentenceDao sentenceRepository;
 
-  public SentenceServiceImpl(
+  public SentenceRepositoryServiceImpl(
       ISentenceDao sentenceRepository) {
     this.sentenceRepository = sentenceRepository;
   }
 
   @Override
-  public Optional<List<SentenceDTO>> findAll() {
+  @Transactional(readOnly = true)
+  public Optional<List<SentenceDTO>> findAllEnable() {
     List<SentenceEntity> result = (List<SentenceEntity>) sentenceRepository
-        .findAll();
+        .findAllByEnable(true);
 
     return result.isEmpty() ? Optional.empty() :
         Optional.of(result.stream()
@@ -31,6 +33,7 @@ public class SentenceServiceImpl implements ISentenceService {
   }
 
   @Override
+  @Transactional
   public void save(SentenceDTO sentence) {
     if (sentence != null && StringUtils.isNotBlank(sentence.getSentence())) {
       sentenceRepository.save(new SentenceEntity(sentence.getSentence()));
@@ -38,7 +41,8 @@ public class SentenceServiceImpl implements ISentenceService {
   }
 
   @Override
+  @Transactional
   public void deleteAll() {
-    sentenceRepository.deleteAll();
+    sentenceRepository.disableAll();
   }
 }
