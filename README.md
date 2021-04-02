@@ -51,10 +51,15 @@ sudo docker-compose up
 ```
 
 > If you already have [Mysql](https://www.mysql.com/) or [MariaDB](https://mariadb.org/) installed in
-your computer, you can modify the DataBase port in file `application.properties`,
-* Current port is `33020`
-* Property to update: jdbc:mysql://localhost:`33020`/anagrams?createDatabaseIfNotExist=true
-> located in `src/main/resources`
+your computer, you can modify the DataBase port, db username and db password in file `application.properties`,
+  * Current port is `33020`
+  * Current username is `root`
+  * Current password is `root`
+  - Properties to update: 
+  - jdbc:mysql://localhost:`33020`/anagrams?createDatabaseIfNotExist=true 
+  - spring.datasource.username=`root`
+  - spring.datasource.password=`root`
+> located into `src/main/resources`
 ```bash
 cd src/main/resources
 ```
@@ -71,5 +76,5 @@ java -jar build/libs/anagrams-*.jar
 * When application is running use the following link:
 http://localhost:8080/swagger-ui.html
 
-> Is recommended use [POSTMAN](https://www.postman.com/) to consume the Endpoints.
+> Is recommended to use [POSTMAN](https://www.postman.com/) to consume the Endpoints.
 > Postman Collection in `anagrams/postman_collection.json`  
