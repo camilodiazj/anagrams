@@ -3,7 +3,6 @@ package co.com.avvillas.anagrams.service;
 import co.com.avvillas.anagrams.api.SentencesOccurrenceResult;
 import co.com.avvillas.anagrams.service.definitions.IAnagramService;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.util.Strings;
@@ -22,13 +21,8 @@ public class AnagramServiceImpl implements IAnagramService {
   @Override
   public SentencesOccurrenceResult validateIfSentencesShareAnagrams(String firstSentence,
       String secondSentence) {
-    List<String> firstWords = Arrays.stream(firstSentence.split(SRT_SPACE))
-        .map(this::orderString)
-        .collect(Collectors.toList());
-    Set<String> occurrences = Arrays.stream(secondSentence.split(SRT_SPACE))
-        .map(this::orderString)
-        .filter(firstWords::contains)
-        .collect(Collectors.toSet());
+
+    Set<String> occurrences = getAnagramOccurrencesFromSentences(firstSentence, secondSentence);
 
     return SentencesOccurrenceResult.builder()
         .existsOccurrences(occurrences.size() > 1)
@@ -39,21 +33,30 @@ public class AnagramServiceImpl implements IAnagramService {
   @Override
   public SentencesOccurrenceResult validateIfSentencesShareAnagrams(String firstSentence,
       String secondSentence, String thirdSentence) {
-    long counter = validateIfSentencesShareAnagrams(firstSentence, secondSentence)
-        .getOccurrencesCount();
-    counter += validateIfSentencesShareAnagrams(firstSentence, thirdSentence).getOccurrencesCount();
-    counter += validateIfSentencesShareAnagrams(firstSentence, thirdSentence).getOccurrencesCount();
-
-
+    Set<String> occurrences = getAnagramOccurrencesFromSentences(firstSentence, secondSentence);
+    occurrences.addAll(getAnagramOccurrencesFromSentences(firstSentence, thirdSentence));
+    occurrences.addAll(getAnagramOccurrencesFromSentences(secondSentence, thirdSentence));
 
     return SentencesOccurrenceResult.builder()
-        .existsOccurrences(counter > 1)
-        .occurrencesCount(counter)
+        .existsOccurrences(occurrences.size() > 1)
+        .occurrencesCount(occurrences.size())
         .build();
   }
 
   private String orderString(String word) {
     return Arrays.stream(word.split(Strings.EMPTY)).sorted()
         .collect(Collectors.joining());
+  }
+
+  private Set<String> getAnagramOccurrencesFromSentences(String firstSentence,
+      String secondSentence) {
+    Set<String> firstWords = Arrays.stream(firstSentence.split(SRT_SPACE))
+        .map(this::orderString)
+        .collect(Collectors.toSet());
+
+    return Arrays.stream(secondSentence.split(SRT_SPACE))
+        .map(this::orderString)
+        .filter(firstWords::contains)
+        .collect(Collectors.toSet());
   }
 }
