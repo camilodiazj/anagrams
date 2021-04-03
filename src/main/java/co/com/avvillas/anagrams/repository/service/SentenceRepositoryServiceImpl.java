@@ -1,7 +1,6 @@
 package co.com.avvillas.anagrams.repository.service;
 
 import co.com.avvillas.anagrams.repository.dao.ISentenceDao;
-import co.com.avvillas.anagrams.repository.dto.SentenceDTO;
 import co.com.avvillas.anagrams.repository.entity.SentenceEntity;
 import java.util.List;
 import java.util.Optional;
@@ -22,21 +21,21 @@ public class SentenceRepositoryServiceImpl implements ISentenceRepositoryService
 
   @Override
   @Transactional(readOnly = true)
-  public Optional<List<SentenceDTO>> findAllEnable() {
+  public Optional<List<String>> findAllEnable() {
     List<SentenceEntity> result = (List<SentenceEntity>) sentenceRepository
         .findAllByEnable(true);
 
     return result.isEmpty() ? Optional.empty() :
         Optional.of(result.stream()
-            .map(sentenceEntity -> new SentenceDTO(sentenceEntity.getSentence()))
+            .map(SentenceEntity::getSentence)
             .collect(Collectors.toList()));
   }
 
   @Override
   @Transactional
-  public void save(SentenceDTO sentence) {
-    if (sentence != null && StringUtils.isNotBlank(sentence.getSentence())) {
-      sentenceRepository.save(new SentenceEntity(sentence.getSentence()));
+  public void save(String sentence) {
+    if (StringUtils.isNotBlank(sentence)) {
+      sentenceRepository.save(new SentenceEntity(sentence));
     }
   }
 
