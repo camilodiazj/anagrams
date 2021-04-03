@@ -2,8 +2,8 @@ package co.com.avvillas.anagrams.business;
 
 import co.com.avvillas.anagrams.api.AnagramRequest;
 import co.com.avvillas.anagrams.api.AnagramResponse;
+import co.com.avvillas.anagrams.api.PersistSentenceResponse;
 import co.com.avvillas.anagrams.api.SentencesOccurrenceResult;
-import co.com.avvillas.anagrams.repository.dto.SentenceDTO;
 import co.com.avvillas.anagrams.repository.service.ISentenceRepositoryService;
 import co.com.avvillas.anagrams.service.definitions.IAnagramService;
 import java.util.Arrays;
@@ -127,7 +127,7 @@ public class AnagramsBusinessTest {
   @Test
   public void shouldValidateIfSentencesShareAnagramsReturnErrorMessageDueInvalidArgument() {
     AnagramRequest anagramRequest = new AnagramRequest();
-    anagramRequest.setFirst("angela es conserva8dora");
+    anagramRequest.setFirst("angela es conserva%dora");
     anagramRequest.setSecond("ellos alegan que ella es muy conversadora");
 
     AnagramResponse result = anagramsBusiness.validateIfSentencesShareAnagrams(anagramRequest);
@@ -136,10 +136,7 @@ public class AnagramsBusinessTest {
 
   @Test
   public void shouldValidateIfPersistedSentencesShareAnagramsReturnTrue() {
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("sent1"),
-        new SentenceDTO("sent2"),
-        new SentenceDTO("sent3"));
+    List<String> sentences = Arrays.asList("sent1", "sent2", "sent3");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
@@ -158,10 +155,7 @@ public class AnagramsBusinessTest {
 
   @Test
   public void shouldValidateIfPersistedSentencesShareAnagramsReturnFalse() {
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("sent1"),
-        new SentenceDTO("sent2"),
-        new SentenceDTO("sent3"));
+    List<String> sentences = Arrays.asList("sent1", "sent2", "sent3");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
@@ -180,9 +174,7 @@ public class AnagramsBusinessTest {
 
   @Test
   public void shouldValidateIfPersistedSentencesShareAnagramsReturnErrorMessageDueSentencesQuantity() {
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("sent1"),
-        new SentenceDTO("sent2"));
+    List<String> sentences = Arrays.asList("sent1", "sent2");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
@@ -193,25 +185,24 @@ public class AnagramsBusinessTest {
 
   @Test
   public void saveSentencesShouldSuccess() {
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("the first sentence"),
-        new SentenceDTO("the second sentence"));
+    List<String> sentences = Arrays.asList("the first sentence", "the second sentence");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
-    Mockito.doNothing().when(sentenceRepositoryService).save(Mockito.any(SentenceDTO.class));
+    Mockito.doNothing().when(sentenceRepositoryService).save(Mockito.anyString());
 
     AnagramResponse result = anagramsBusiness.saveSentence("the third sentence");
 
-    Assert.assertEquals("Saved!", result.getResponse());
+    PersistSentenceResponse persistSentenceResponse = (PersistSentenceResponse) result
+        .getResponse();
+
+    Assert.assertTrue(persistSentenceResponse.isSaved());
   }
 
   @Test
   public void saveSentencesShouldReturnErrorMessageDueDbSentencesPersisted() {
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("the first sentence"),
-        new SentenceDTO("the second sentence"),
-        new SentenceDTO("the third sentence"));
+    List<String> sentences = Arrays
+        .asList("the first sentence", "the second sentence", "the third sentence");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
@@ -222,9 +213,7 @@ public class AnagramsBusinessTest {
 
   @Test
   public void saveSentencesShouldReturnErrorMessageDueSentencesAlreadySaved() {
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("the first sentence"),
-        new SentenceDTO("the third sentence"));
+    List<String> sentences = Arrays.asList("the first sentence", "the third sentence");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));
@@ -237,9 +226,7 @@ public class AnagramsBusinessTest {
   public void saveSentencesShouldReturnErrorMessageDueInvalidSentence() {
     final String INVALID_SENTENCE_MESSAGE =
         "Words in sentences must have only letters and Sentence must not be empty.";
-    List<SentenceDTO> sentences = Arrays.asList(
-        new SentenceDTO("the first sentence"),
-        new SentenceDTO("the third sentence"));
+    List<String> sentences = Arrays.asList("the first sentence", "the third sentence");
 
     Mockito.when(sentenceRepositoryService.findAllEnable())
         .thenReturn(Optional.of(sentences));

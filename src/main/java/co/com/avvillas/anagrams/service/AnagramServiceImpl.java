@@ -28,6 +28,7 @@ public class AnagramServiceImpl implements IAnagramService {
     return SentencesOccurrenceResult.builder()
         .existsOccurrences(occurrences.size() >= 1)
         .occurrencesCount(occurrences.size())
+        .sentencesReceived(Arrays.asList(firstSentence, secondSentence))
         .build();
   }
 
@@ -41,6 +42,7 @@ public class AnagramServiceImpl implements IAnagramService {
     return SentencesOccurrenceResult.builder()
         .existsOccurrences(occurrences.size() >= 1)
         .occurrencesCount(occurrences.size())
+        .sentencesReceived(Arrays.asList(firstSentence, secondSentence, thirdSentence))
         .build();
   }
 

@@ -2,14 +2,13 @@ package co.com.avvillas.anagrams.business;
 
 import co.com.avvillas.anagrams.api.AnagramRequest;
 import co.com.avvillas.anagrams.api.AnagramResponse;
-import co.com.avvillas.anagrams.repository.dto.SentenceDTO;
+import co.com.avvillas.anagrams.api.PersistSentenceResponse;
 import co.com.avvillas.anagrams.repository.service.ISentenceRepositoryService;
 import co.com.avvillas.anagrams.service.definitions.IAnagramService;
 import co.com.avvillas.anagrams.util.RegexUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -57,29 +56,26 @@ public class AnagramsBusiness {
   }
 
   public AnagramResponse validateIfPersistedSentencesShareAnagrams() {
-    List<SentenceDTO> sentences = getPersistedSentences();
+    List<String> sentences = getPersistedSentences();
     if (sentences.size() == 3) {
-      List<String> sentencesList = sentences.stream()
-          .map(SentenceDTO::getSentence)
-          .collect(Collectors.toList());
       sentenceRepositoryService.deleteAll();
 
       return
           AnagramResponse.builder()
               .response(anagramService.validateIfSentencesShareAnagrams(
-                  sentencesList.get(0),
-                  sentencesList.get(1),
-                  sentencesList.get(2)))
+                  sentences.get(0),
+                  sentences.get(1),
+                  sentences.get(2)))
               .build();
     } else {
       return AnagramResponse.builder()
-          .errorMessage("Not enough sentences to validate, please send more sentences")
+          .errorMessage(sentences.size() + " sentences to validate, please send more sentences.")
           .build();
     }
   }
 
   public AnagramResponse saveSentence(String sentence) {
-    List<SentenceDTO> persistedSentences = getPersistedSentences();
+    List<String> persistedSentences = getPersistedSentences();
     sentence = cleanSentence(sentence);
 
     if (persistedSentences.size() >= 3) {
@@ -95,9 +91,9 @@ public class AnagramsBusiness {
           .errorMessage(INVALID_SENTENCE_MESSAGE)
           .build();
     } else {
-      sentenceRepositoryService.save(new SentenceDTO(sentence));
+      sentenceRepositoryService.save(sentence);
       return AnagramResponse.builder()
-          .response("Saved!")
+          .response(new PersistSentenceResponse(true, getPersistedSentences()))
           .build();
     }
 
@@ -115,15 +111,16 @@ public class AnagramsBusiness {
   private boolean isSentenceValid(String sentence) {
     return StringUtils.isNotBlank(sentence) && Arrays
         .stream(sentence.split(SRT_SPACE))
-        .allMatch(word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_AND_NUMBERS_REGEX));
+        .allMatch(
+            word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_AND_NUMBERS_REGEX));
   }
 
-  private boolean isTheSentenceAlreadyInDb(String sentence, List<SentenceDTO> sentenceList) {
+  private boolean isTheSentenceAlreadyInDb(String sentence, List<String> sentenceList) {
     return sentenceList.stream()
-        .anyMatch(sentenceDTO -> sentenceDTO.getSentence().equals(sentence));
+        .anyMatch(expression -> expression.equals(sentence));
   }
 
-  private List<SentenceDTO> getPersistedSentences() {
+  private List<String> getPersistedSentences() {
     return sentenceRepositoryService.findAllEnable().orElse(new ArrayList<>());
   }
 
