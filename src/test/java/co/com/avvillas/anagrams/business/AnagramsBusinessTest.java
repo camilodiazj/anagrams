@@ -91,6 +91,23 @@ public class AnagramsBusinessTest {
   }
 
   @Test
+  public void shouldValidateIfSentencesShareAnagramsReturnTrueWithTwoOrMoreWhiteSpaces() {
+    AnagramRequest anagramRequest = new AnagramRequest();
+    anagramRequest.setFirst("angela        es conservadora");
+    anagramRequest.setSecond("ellos alegan que ella es muy conversadora");
+
+    Mockito.when(
+        anagramService.validateIfSentencesShareAnagrams(Mockito.anyString(), Mockito.anyString()))
+        .thenReturn(SentencesOccurrenceResult.builder()
+            .existsOccurrences(true)
+            .build());
+
+    AnagramResponse result = anagramsBusiness.validateIfSentencesShareAnagrams(anagramRequest);
+    SentencesOccurrenceResult occurrenceResult = (SentencesOccurrenceResult) result.getResponse();
+    Assert.assertTrue(occurrenceResult.isExistsOccurrences());
+  }
+
+  @Test
   public void shouldValidateIfSentencesShareAnagramsReturnFalse() {
     AnagramRequest anagramRequest = new AnagramRequest();
     anagramRequest.setFirst("Angela eS Conservadora");

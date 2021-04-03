@@ -35,11 +35,11 @@ public class AnagramServiceImplTest {
   }
 
   @Test
-  public void shouldValidateIfSentencesShareAnagramsReturnZero() {
+  public void shouldValidateIfSentencesShareAnagramsReturnOneOccurrence() {
     SentencesOccurrenceResult result = anagramService
-        .validateIfSentencesShareAnagrams("Es Angela conservadora",
+        .validateIfSentencesShareAnagrams("es Angela conservadora",
             "ellos alegan que ella es es muy Conversadora");
-    Assert.assertEquals(0, result.getOccurrencesCount());
+    Assert.assertEquals(1, result.getOccurrencesCount());
   }
 
   @Test

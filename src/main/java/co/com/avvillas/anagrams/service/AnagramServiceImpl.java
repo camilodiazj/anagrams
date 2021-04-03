@@ -2,6 +2,7 @@ package co.com.avvillas.anagrams.service;
 
 import co.com.avvillas.anagrams.api.SentencesOccurrenceResult;
 import co.com.avvillas.anagrams.service.definitions.IAnagramService;
+import co.com.avvillas.anagrams.util.RegexUtils;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class AnagramServiceImpl implements IAnagramService {
     Set<String> occurrences = getAnagramOccurrencesFromSentences(firstSentence, secondSentence);
 
     return SentencesOccurrenceResult.builder()
-        .existsOccurrences(occurrences.size() > 1)
+        .existsOccurrences(occurrences.size() >= 1)
         .occurrencesCount(occurrences.size())
         .build();
   }
@@ -38,7 +39,7 @@ public class AnagramServiceImpl implements IAnagramService {
     occurrences.addAll(getAnagramOccurrencesFromSentences(secondSentence, thirdSentence));
 
     return SentencesOccurrenceResult.builder()
-        .existsOccurrences(occurrences.size() > 1)
+        .existsOccurrences(occurrences.size() >= 1)
         .occurrencesCount(occurrences.size())
         .build();
   }
@@ -51,6 +52,7 @@ public class AnagramServiceImpl implements IAnagramService {
   private Set<String> getAnagramOccurrencesFromSentences(String firstSentence,
       String secondSentence) {
     Set<String> firstWords = Arrays.stream(firstSentence.split(SRT_SPACE))
+        .filter(word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_REGEX))
         .map(this::orderString)
         .collect(Collectors.toSet());
 
