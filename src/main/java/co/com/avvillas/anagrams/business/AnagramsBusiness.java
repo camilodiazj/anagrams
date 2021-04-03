@@ -43,8 +43,8 @@ public class AnagramsBusiness {
   }
 
   public AnagramResponse validateIfSentencesShareAnagrams(AnagramRequest request) {
-    String firstSentence = request.getFirst();
-    String secondSentence = request.getSecond();
+    String firstSentence = cleanSentence(request.getFirst());
+    String secondSentence = cleanSentence(request.getSecond());
 
     return isSentenceValid(firstSentence) && isSentenceValid(secondSentence) ?
         AnagramResponse.builder()
@@ -80,6 +80,7 @@ public class AnagramsBusiness {
 
   public AnagramResponse saveSentence(String sentence) {
     List<SentenceDTO> persistedSentences = getPersistedSentences();
+    sentence = cleanSentence(sentence);
 
     if (persistedSentences.size() >= 3) {
       return AnagramResponse.builder()
@@ -102,6 +103,10 @@ public class AnagramsBusiness {
 
   }
 
+  private String cleanSentence(String sentence) {
+    return sentence.replaceAll(RegexUtils.TEXT_WITH_TWO_OR_MORE_BLANK_SPACES, SRT_SPACE);
+  }
+
   private boolean isValidWord(String word) {
     return StringUtils.isNotBlank(word) && RegexUtils
         .wordMatchRegex(word.trim(), RegexUtils.ONLY_LETTERS_REGEX);
@@ -110,7 +115,7 @@ public class AnagramsBusiness {
   private boolean isSentenceValid(String sentence) {
     return StringUtils.isNotBlank(sentence) && Arrays
         .stream(sentence.split(SRT_SPACE))
-        .allMatch(word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_REGEX));
+        .allMatch(word -> RegexUtils.wordMatchRegex(word, RegexUtils.ONLY_LETTERS_AND_NUMBERS_REGEX));
   }
 
   private boolean isTheSentenceAlreadyInDb(String sentence, List<SentenceDTO> sentenceList) {
