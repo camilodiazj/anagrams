@@ -14,6 +14,7 @@ You will need the following services properly installed on your computer.
 * [Gradle](https://gradle.org)
 * [Maven](https://maven.apache.org/)
 * [Docker](https://docs.docker.com/)
+* [Docker-compose](https://docs.docker.com/compose/install/)
 
 ## Installation
 
@@ -72,8 +73,11 @@ java -jar build/libs/anagrams-*.jar
 
 * This application runs over port 8080, so you should prefix endpoints with http://localhost:8080/
 ## Swagger Documentation
-* When application is running use the following link:
-http://localhost:8080/swagger-ui.html
+http://anagramsloadbalances-1195462994.us-east-2.elb.amazonaws.com/swagger-ui.html
 
 > Is recommended to use [POSTMAN](https://www.postman.com/) to consume the Endpoints.
-> Postman Collection in `anagrams/postman_collection.json`  
+> * For local consume: (using localhost:8080)
+>  * Postman Collection in `postman-collections/postman_collection.json`
+ ---
+> * For remote consume: (using http://anagramsloadbalances-1195462994.us-east-2.elb.amazonaws.com)
+>  * Prod Postman Collection in `postman-collections/prod_postman_collection.json`
